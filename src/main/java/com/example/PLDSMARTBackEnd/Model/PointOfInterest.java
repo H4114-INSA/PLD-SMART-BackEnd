@@ -28,36 +28,17 @@ public class PointOfInterest {
     private Date createDate;
 
     private Status status;
+    //TODO : Réflechir à la direction des associations
+    @ManyToOne
+    private User owner;
 
-    private Integer idOwner;
+    @ManyToOne
+    private GeographicalCoordinates coordinates;
 
-    //private GeographicalCoordinates coordinates;
+    @ManyToMany
+    private List<Category> categories;
 
-    private List<Integer> idCategories;
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public Integer getIdOwner() {
-        return idOwner;
-    }
-
-    public void setIdOwner(Integer idOwner) {
-        this.idOwner = idOwner;
-    }
-
-    public List<Integer> getIdCategories() {
-        return idCategories;
-    }
-
-    public void setIdCategories(List<Integer> idCategories) {
-        this.idCategories = idCategories;
-    }
+    public PointOfInterest(){}
 
     public Integer getId() {
         return Id;
@@ -99,5 +80,35 @@ public class PointOfInterest {
         this.createDate = createDate;
     }
 
+    public Status getStatus() {
+        return status;
+    }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public GeographicalCoordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(GeographicalCoordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
 }

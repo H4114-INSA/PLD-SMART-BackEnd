@@ -1,9 +1,7 @@
 package com.example.PLDSMARTBackEnd.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -17,8 +15,10 @@ public class User {
 
     private String email;
 
-    public User() {
-    }
+    @OneToMany(mappedBy = "owner")
+    private List<PointOfInterest> listOfPoints;
+
+    public User() {}
 
     public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
@@ -56,5 +56,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<PointOfInterest> getListOfPoints() {
+        return listOfPoints;
+    }
+
+    public void setListOfPoints(List<PointOfInterest> listOfPoints) {
+        this.listOfPoints = listOfPoints;
     }
 }
