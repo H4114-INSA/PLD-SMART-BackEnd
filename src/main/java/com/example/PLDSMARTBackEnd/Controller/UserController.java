@@ -29,7 +29,7 @@ public class UserController {
         user.setLastName(lastName);
         user.setEmail(email);
         userRepository.save(user);
-        return "Saved"; // TODO : Faire le message d'erreur en cas d'échec de l'ajout dans le DAO (boolean ?)
+        return "Saved"; // TODO : Faire le message d'erreur en cas d'échec de l'ajout (boolean ?)
     }
 
     @GetMapping(path="/all")

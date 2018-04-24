@@ -1,9 +1,11 @@
 package com.example.PLDSMARTBackEnd.Model;
 
 
-import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,38 +16,43 @@ enum Status{
 }
 
 @Entity
-public class PointOfInterest {
+@DiscriminatorColumn(name = "Temp")
+@Inheritance (strategy = InheritanceType.JOINED)
+public class PointOfInterest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer Id;
+    protected Integer IdPoint;
 
-    private String title;
+    @NotNull
+    protected String title;
 
-    private String description;
+    protected String description;
 
-    private String pathToPicture;
+    protected String pathToPicture;
 
-    private Date createDate;
+    @Temporal(value = TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    protected Date createDate;
 
-    private Status status;
-    //TODO : Réflechir à la direction des associations
+    protected Status status;
+
     @ManyToOne
-    private User owner;
+    protected User owner;
 
     @ManyToOne
-    private GeographicalCoordinates coordinates;
+    protected GeographicalCoordinates coordinates;
 
     @ManyToMany
-    private List<Category> categories;
+    protected List<Category> categories;
 
     public PointOfInterest(){}
 
-    public Integer getId() {
-        return Id;
+    public Integer getIdPoint() {
+        return IdPoint;
     }
 
-    public void setId(Integer id) {
-        Id = id;
+    public void setIdPoint(Integer idPoint) {
+        IdPoint = idPoint;
     }
 
     public String getTitle() {

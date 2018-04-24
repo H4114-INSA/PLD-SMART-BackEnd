@@ -10,7 +10,7 @@ public class GeographicalCoordinates {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer IdCoordinates;
 
     private double longitude;
     private double latitude;
@@ -22,12 +22,12 @@ public class GeographicalCoordinates {
         this.latitude = latitude;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdCoordinates() {
+        return IdCoordinates;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCoordinates(Integer idCoordinates) {
+        this.IdCoordinates = idCoordinates;
     }
 
     public double getLongitude() {
