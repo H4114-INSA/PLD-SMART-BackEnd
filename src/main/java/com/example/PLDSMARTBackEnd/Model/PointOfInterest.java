@@ -39,11 +39,28 @@ public class PointOfInterest implements Serializable {
     @ManyToOne
     protected User owner;
 
-    @ManyToOne
-    protected GeographicalCoordinates coordinates;
-
     @ManyToMany
     protected List<Category> categories;
+
+    private double longitude;
+
+    private double latitude;
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
     public PointOfInterest(){}
 
@@ -101,14 +118,6 @@ public class PointOfInterest implements Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public GeographicalCoordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(GeographicalCoordinates coordinates) {
-        this.coordinates = coordinates;
     }
 
     public List<Category> getCategories() {

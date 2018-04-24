@@ -36,19 +36,16 @@ public class PointOfInterestController {
         //Find the Object user thanks to his id
         User owner =  uR.findById(Long.parseLong(idUser)).get();
 
-        //Conversion date
-        DateFormat fromat = new SimpleDateFormat("dd-MM-yyyy");
-        Date creationdate;
         PointOfInterest p = new PointOfInterest();
         p.setTitle(title);
         p.setDescription(description);
         p.setOwner(owner);
-        //p.setCreateDate();
+        p.setCreateDate(new Date());
+
+        //Save point
         pointRepository.save(p);
         return "Saved";
     }
-
-
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<PointOfInterest> getAllPoints() {
