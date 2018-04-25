@@ -21,7 +21,7 @@ enum Status{
 public class PointOfInterest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Integer IdPoint;
+    protected long IdPoint;
 
     @NotNull
     protected String title;
@@ -42,29 +42,13 @@ public class PointOfInterest implements Serializable {
     @ManyToMany
     protected List<Category> categories;
 
-    private double longitude;
+    protected double longitude;
 
-    private double latitude;
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
+    protected double latitude;
 
     public PointOfInterest(){}
 
-    public Integer getIdPoint() {
+    public long getIdPoint() {
         return IdPoint;
     }
 
@@ -127,4 +111,21 @@ public class PointOfInterest implements Serializable {
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
 }
