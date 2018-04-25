@@ -1,9 +1,11 @@
 package com.example.PLDSMARTBackEnd.Model;
 
 
-import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,38 +16,44 @@ enum Status{
 }
 
 @Entity
-public class PointOfInterest {
+@DiscriminatorColumn(name = "Temp")
+@Inheritance (strategy = InheritanceType.JOINED)
+public class PointOfInterest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer Id;
+    protected long IdPoint;
 
-    private String title;
+    @NotNull
+    protected String title;
 
-    private String description;
+    protected String description;
 
-    private String pathToPicture;
+    protected String pathToPicture;
 
-    private Date createDate;
+    @Temporal(value = TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    protected Date createDate;
 
-    private Status status;
-    //TODO : Réflechir à la direction des associations
+    protected Status status;
+
     @ManyToOne
-    private User owner;
-
-    @ManyToOne
-    private GeographicalCoordinates coordinates;
+    protected User owner;
 
     @ManyToMany
-    private List<Category> categories;
+    protected List<Category> categories;
+
+    protected double longitude;
+
+    protected double latitude;
 
     public PointOfInterest(){}
 
-    public Integer getId() {
-        return Id;
+    public long getIdPoint() {
+        return IdPoint;
     }
 
-    public void setId(Integer id) {
-        Id = id;
+    public void setIdPoint(Integer idPoint) {
+        IdPoint = idPoint;
     }
 
     public String getTitle() {
@@ -96,14 +104,6 @@ public class PointOfInterest {
         this.owner = owner;
     }
 
-    public GeographicalCoordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(GeographicalCoordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
     public List<Category> getCategories() {
         return categories;
     }
@@ -111,4 +111,21 @@ public class PointOfInterest {
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
 }

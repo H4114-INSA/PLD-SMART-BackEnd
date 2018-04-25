@@ -7,16 +7,13 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
+    private Integer IdUser;
 
     private String firstName;
 
     private String lastName;
 
     private String email;
-
-    @OneToMany(mappedBy = "owner")
-    private List<PointOfInterest> listOfPoints;
 
     public User() {}
 
@@ -26,12 +23,12 @@ public class User {
         this.email = email;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdUser() {
+        return IdUser;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdUser(Integer id) {
+        this.IdUser = id;
     }
 
     public String getFirstName() {
@@ -56,13 +53,5 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<PointOfInterest> getListOfPoints() {
-        return listOfPoints;
-    }
-
-    public void setListOfPoints(List<PointOfInterest> listOfPoints) {
-        this.listOfPoints = listOfPoints;
     }
 }
