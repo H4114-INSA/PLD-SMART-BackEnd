@@ -4,24 +4,15 @@ import com.example.PLDSMARTBackEnd.Model.User;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
 import com.example.PLDSMARTBackEnd.util.UtilLDAP;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.filter.AndFilter;
-import org.springframework.ldap.filter.Filter;
-import org.springframework.ldap.filter.HardcodedFilter;
-import org.springframework.ldap.query.ContainerCriteria;
-import org.springframework.ldap.query.LdapQuery;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
-import javax.naming.ldap.LdapName;
 
-import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 @CrossOrigin
 @RequestMapping(path = "/user")
