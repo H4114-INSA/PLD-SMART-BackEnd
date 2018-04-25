@@ -1,5 +1,8 @@
 package com.example.PLDSMARTBackEnd.Model;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,15 +12,21 @@ public class User {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer IdUser;
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
+    @Column(unique = true)
     private String email;
 
     private String biography;
 
     private String pathToProfilePicture;
+
+    @Column(nullable = false)
+    private String hashPassword;
 
     public User() {}
 
@@ -73,5 +82,13 @@ public class User {
 
     public void setPathToProfilePicture(String pathToProfilePicture) {
         this.pathToProfilePicture = pathToProfilePicture;
+    }
+
+    public String getHashPassword() {
+        return hashPassword;
+    }
+
+    public void setHashPassword(String hashPassword) {
+        this.hashPassword = hashPassword;
     }
 }

@@ -13,10 +13,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/user/add/**").permitAll()
+                .antMatchers("/user/authentication/**").permitAll()
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                    .loginProcessingUrl("/login")
+                    .failureUrl("/login?error")
+                .and()
+                .logout().permitAll();
+
     }
 
     @Override
