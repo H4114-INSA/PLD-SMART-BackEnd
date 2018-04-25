@@ -54,16 +54,6 @@ sn: Hamilton
 uid: bob
 userPassword: bobspassword
 
-dn: uid=thomas,ou=people,dc=springframework,dc=org
-objectclass: top
-objectclass: person
-objectclass: organizationalPerson
-objectclass: inetOrgPerson
-cn: Thomas Point
-sn: Point
-uid: thomas
-userPassword: thomaspassword
-
 
 dn: cn=developers,ou=groups,dc=springframework,dc=org
 objectclass: top

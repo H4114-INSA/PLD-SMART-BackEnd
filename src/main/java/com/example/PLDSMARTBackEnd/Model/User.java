@@ -1,5 +1,8 @@
 package com.example.PLDSMARTBackEnd.Model;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,11 +12,17 @@ public class User {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer IdUser;
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
+    @Column(unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String hashPassword;
 
     public User() {}
 
@@ -53,5 +62,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getHashPassword() {
+        return hashPassword;
+    }
+
+    public void setHashPassword(String hashPassword) {
+        this.hashPassword = hashPassword;
     }
 }
