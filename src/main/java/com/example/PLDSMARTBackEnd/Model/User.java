@@ -21,6 +21,10 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    private String biography;
+
+    private String pathToProfilePicture;
+
     @Column(nullable = false)
     private String hashPassword;
 
@@ -62,6 +66,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getPathToProfilePicture() {
+        return pathToProfilePicture;
+    }
+
+    public void setPathToProfilePicture(String pathToProfilePicture) {
+        this.pathToProfilePicture = pathToProfilePicture;
     }
 
     public String getHashPassword() {
