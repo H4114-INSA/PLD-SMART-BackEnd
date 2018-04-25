@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,23 +28,44 @@ public class PointOfInterestController {
     @Autowired
     private UserRepository uR;
 
+    @Autowired
+    private TemporaryPointOfInterestRepository temporaryPoIRepository;
+
     @RequestMapping(path = "/add")
     public @ResponseBody
     String addNewPoint(@RequestParam String title,
                        @RequestParam String description,
-                       @RequestParam String idUser){ // TODO : Ajouter coordo et categories
+                       @RequestParam String mailUser,
+                       @RequestParam String longitude,
+                       @RequestParam String latitude,
+                       @RequestParam(required = false, defaultValue = "") String endDate){ // TODO : Ajouter coordo et categories
 
-        //Find the Object user thanks to his id
-        User owner =  uR.findById(Long.parseLong(idUser)).get();
+        //Find the Object user thanks to his email address
+        User owner =  uR.findbyMail(mailUser);
 
+        //Create the new point
         PointOfInterest p = new PointOfInterest();
         p.setTitle(title);
         p.setDescription(description);
         p.setOwner(owner);
         p.setCreateDate(new Date());
+        p.setLatitude(Long.parseLong(latitude));
+        p.setLongitude(Long.parseLong(longitude));
 
-        //Save point
-        pointRepository.save(p);
+        if(!endDate.equals("")){
+            TemporaryPointOfInterest tp = new TemporaryPointOfInterest(p);
+            DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                Date date = format.parse(endDate);
+                tp.setEndDate(date);
+                temporaryPoIRepository.save(tp);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else {
+            //Save point
+            pointRepository.save(p);
+        }
         return "Saved";
     }
 

@@ -15,9 +15,6 @@ public class User {
 
     private String email;
 
-    @OneToMany
-    private List<PointOfInterest> listOfPoints;
-
     public User() {}
 
     public User(String firstName, String lastName, String email) {
@@ -56,13 +53,5 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<PointOfInterest> getListOfPoints() {
-        return listOfPoints;
-    }
-
-    public void setListOfPoints(List<PointOfInterest> listOfPoints) {
-        this.listOfPoints = listOfPoints;
     }
 }
