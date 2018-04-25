@@ -1,6 +1,7 @@
 package com.example.PLDSMARTBackEnd.Model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Category {
@@ -8,6 +9,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer IdCategory;
 
+    @Column(nullable = false)
     private String categoryName;
 
     public Integer getIdCategory() {

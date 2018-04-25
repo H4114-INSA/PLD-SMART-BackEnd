@@ -15,6 +15,10 @@ public class User {
 
     private String email;
 
+    private String biography;
+
+    private String pathToProfilePicture;
+
     public User() {}
 
     public User(String firstName, String lastName, String email) {
@@ -53,5 +57,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getPathToProfilePicture() {
+        return pathToProfilePicture;
+    }
+
+    public void setPathToProfilePicture(String pathToProfilePicture) {
+        this.pathToProfilePicture = pathToProfilePicture;
     }
 }
