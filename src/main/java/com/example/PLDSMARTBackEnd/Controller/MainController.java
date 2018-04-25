@@ -1,16 +1,16 @@
 package com.example.PLDSMARTBackEnd.Controller;
 
-import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
-import com.example.PLDSMARTBackEnd.Model.TemporaryPointOfInterest;
-import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
 @CrossOrigin //Allows requests from all origin
 @Controller    // This means that this class is a Controller
-@RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
 public class MainController {
+
+    @GetMapping("/")
+    public @ResponseBody String index() {
+        return "Welcome to the home page!";
+    }
 
 }
