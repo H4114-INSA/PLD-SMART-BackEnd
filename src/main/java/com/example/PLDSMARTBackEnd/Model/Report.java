@@ -8,17 +8,16 @@ enum Cause{
     Illicite;
 }
 
-@Entity
+@Entity(name = "Report")
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer IdReport;
 
-    @Column(nullable = false)
+    @ManyToOne
     private User user;
 
     @ManyToOne
-    @Column(nullable = false)
     private PointOfInterest point;
 
     private Cause cause;

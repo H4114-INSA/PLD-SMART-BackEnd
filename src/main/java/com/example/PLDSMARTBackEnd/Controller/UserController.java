@@ -16,7 +16,10 @@ public class UserController {
 
     @GetMapping(path="/add") // Map ONLY GET Requests
     public @ResponseBody
-    String addNewUser (@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email) {
+    String addNewUser (@RequestParam String firstName,
+                       @RequestParam String lastName,
+                       @RequestParam String email,
+                       @RequestParam String biography) { //TODO : faire la gestion des images
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
@@ -28,6 +31,7 @@ public class UserController {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
+        user.setBiography(biography);
         userRepository.save(user);
         return "Saved"; // TODO : Faire le message d'erreur en cas d'échec de l'ajout (boolean ?)
     }

@@ -3,7 +3,7 @@ package com.example.PLDSMARTBackEnd.Model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
+@Entity(name = "Category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

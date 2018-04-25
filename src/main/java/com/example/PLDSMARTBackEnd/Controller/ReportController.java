@@ -28,8 +28,8 @@ public class ReportController {
     String addReport(@RequestParam String email,
                      @RequestParam long idPoint,
                      @RequestParam String cause){
-        User user = userRepository.findbyMail(email);
-        PointOfInterest poi = pointOfInterestRepository.findByIdPoint(idPoint);
+        User user = userRepository.findByMail(email);
+        PointOfInterest poi = new PointOfInterest();// TODO : pointOfInterestRepository.findByIdPoint(idPoint);
         // TODO : faire la cause
 
         Report report = new Report();

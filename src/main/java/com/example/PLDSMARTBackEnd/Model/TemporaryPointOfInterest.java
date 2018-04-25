@@ -5,7 +5,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
-@Entity
+@Entity(name = "TemporaryPointOfInterest")
 public class TemporaryPointOfInterest extends PointOfInterest {
     @Temporal(value = TemporalType.DATE)
     private Date endDate;

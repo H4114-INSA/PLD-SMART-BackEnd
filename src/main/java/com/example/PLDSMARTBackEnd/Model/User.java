@@ -3,7 +3,7 @@ package com.example.PLDSMARTBackEnd.Model;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity(name = "User")
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

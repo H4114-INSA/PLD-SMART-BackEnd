@@ -15,19 +15,20 @@ enum Status{
     Deprecated;
 }
 
-@Entity
-@DiscriminatorColumn(name = "Temp")
+@Entity(name = "PointOfInterest")
 @Inheritance (strategy = InheritanceType.JOINED)
 public class PointOfInterest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long IdPoint;
+    @Column(name = "IdPoint")
+    protected Integer IdPoint;
 
     @NotNull
     protected String title;
 
     protected String description;
 
+    @Column(name = "pathToPicture")
     protected String pathToPicture;
 
     @Temporal(value = TemporalType.DATE)

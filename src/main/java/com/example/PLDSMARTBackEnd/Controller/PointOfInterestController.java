@@ -50,7 +50,7 @@ public class PointOfInterestController {
                        @RequestParam(required = false, defaultValue = "") String endDate) { // TODO : Ajouter categories
 
         //Find the Object user thanks to his email address
-        User owner = uR.findbyMail(mailUser);
+        User owner = uR.findByMail(mailUser);
 
         //Create the new point
         PointOfInterest p = new PointOfInterest();
@@ -65,28 +65,27 @@ public class PointOfInterestController {
         if (file.isEmpty()) {
             return "Image manquante";
         }
-        try {
 
+        try {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-            Files.write(path, bytes);
 
+            Path path = Paths.get(UPLOADED_FOLDER + p.getIdPoint()+".png");
+            Files.write(path, bytes);
+            // TODO : faire le stockage des path dans l'objet poi
             if (!endDate.equals("")) {
                 TemporaryPointOfInterest tp = new TemporaryPointOfInterest(p);
                 DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                try {
-                    Date date = format.parse(endDate);
-                    tp.setEndDate(date);
-                    temporaryPoIRepository.save(tp);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Date date = format.parse(endDate);
+                tp.setEndDate(date);
+                temporaryPoIRepository.save(tp);
             } else {
                 //Save point
                 pointRepository.save(p);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return "Saved";
