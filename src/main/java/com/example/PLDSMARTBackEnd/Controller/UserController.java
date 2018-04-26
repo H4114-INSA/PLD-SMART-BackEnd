@@ -30,7 +30,7 @@ public class UserController {
     String addNewUser (@RequestParam String firstName,
                        @RequestParam String lastName,
                        @RequestParam String email,
-                       @RequestParam String biography, //TODO : faire la gestion des images
+                       @RequestParam(required = false) String biography, //TODO : faire la gestion des images
                        @RequestParam String password) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request

@@ -23,13 +23,12 @@ public class PointOfInterest implements Serializable {
     @Column(name = "IdPoint")
     protected Integer IdPoint;
 
-    @NotNull
     protected String title;
 
     protected String description;
 
-    @Column(name = "pathToPicture")
-    protected String pathToPicture;
+
+    protected byte[] picture;
 
     @Temporal(value = TemporalType.DATE)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -73,12 +72,12 @@ public class PointOfInterest implements Serializable {
         this.description = description;
     }
 
-    public String getPathToPicture() {
-        return pathToPicture;
+    public byte[] getPicture() {
+        return picture;
     }
 
-    public void setPathToPicture(String pathToPicture) {
-        this.pathToPicture = pathToPicture;
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     public Date getCreateDate() {

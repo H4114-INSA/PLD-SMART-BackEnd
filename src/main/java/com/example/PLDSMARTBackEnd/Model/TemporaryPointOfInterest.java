@@ -17,7 +17,7 @@ public class TemporaryPointOfInterest extends PointOfInterest {
     public TemporaryPointOfInterest(PointOfInterest poi){
         this.title = poi.getTitle();
         this.description = poi.getDescription();
-        this.pathToPicture = poi.getPathToPicture();
+        this.picture = poi.getPicture();
         this.createDate = poi.getCreateDate();
         this.status = poi.getStatus();
         this.categories = poi.getCategories();
