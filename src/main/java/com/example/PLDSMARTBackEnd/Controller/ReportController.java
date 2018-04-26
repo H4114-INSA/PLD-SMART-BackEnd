@@ -26,10 +26,10 @@ public class ReportController {
     @GetMapping(path = "/add")
     public @ResponseBody
     String addReport(@RequestParam String email,
-                     @RequestParam long idPoint,
+                     @RequestParam int idPoint,
                      @RequestParam String cause){
         User user = userRepository.findByMail(email);
-        PointOfInterest poi = new PointOfInterest();// TODO : pointOfInterestRepository.findByIdPoint(idPoint);
+        PointOfInterest poi = pointOfInterestRepository.findById(idPoint);
         // TODO : faire la cause
 
         Report report = new Report();

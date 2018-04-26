@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "IdCategory")
     private Integer IdCategory;
 
     @Column(nullable = false)

@@ -1,9 +1,11 @@
 package com.example.PLDSMARTBackEnd.Controller;
 
 
+import com.example.PLDSMARTBackEnd.Model.Category;
 import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
 import com.example.PLDSMARTBackEnd.Model.TemporaryPointOfInterest;
 import com.example.PLDSMARTBackEnd.Model.User;
+import com.example.PLDSMARTBackEnd.Repository.CategoryRepository;
 import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @CrossOrigin
 @RequestMapping(path = "/poi")
@@ -36,19 +40,23 @@ public class PointOfInterestController {
     @Autowired
     private TemporaryPointOfInterestRepository temporaryPoIRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     //Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "UploadedFile";
+    //private static String UPLOADED_FOLDER = "UploadedFile";
 
  //   @RequestMapping(value=("/uploadpsd"),headers=("content-type=multipart/*"),method=RequestMethod.POST)
-    @RequestMapping(path = "/add",headers=("content-type=multipart/*"))
+    @RequestMapping(path = "/add")//,headers=("content-type=multipart/*"))
     public @ResponseBody
     String addNewPoint(@RequestParam String title,
                        @RequestParam String description,
                        @RequestParam String mailUser,
                        @RequestParam long longitude,
                        @RequestParam long latitude,
-                       @RequestParam MultipartFile file,
-                       @RequestParam(required = false, defaultValue = "") String endDate) { // TODO : Ajouter categories
+                       @RequestParam String[] categories,
+                       @RequestParam(required = false) MultipartFile file,
+                       @RequestParam(required = false, defaultValue = "") String endDate) {
 
         //Find the Object user thanks to his email address
         User owner = uR.findByMail(mailUser);
@@ -62,14 +70,23 @@ public class PointOfInterestController {
         p.setLatitude(latitude);
         p.setLongitude(longitude);
 
-        //Load the picture
-        if (file.isEmpty()) {
-            return "Image manquante";
+        //Put all categories in a list
+        List<Category> categoryList = new ArrayList();
+        for(int i = 0 ; i<categories.length ; i++){
+            Category tmp = categoryRepository.findById(Integer.parseInt(categories[i]));
+            System.out.println(tmp.getCategoryName());
+            categoryList.add(tmp);
         }
+        p.setCategories(categoryList);
+
+        //Load the picture
+        /*if (file.isEmpty()) {
+            return "Image manquante";
+        }*/
 
         try {
             // Get the file and save it somewhere
-            p.setPicture(file.getBytes());
+           // p.setPicture(file.getBytes());
 
            /* Path path = Paths.get(UPLOADED_FOLDER + p.getIdPoint()+".png");
             Files.write(path, bytes);*/
@@ -84,13 +101,14 @@ public class PointOfInterestController {
                 //Save point
                 pointRepository.save(p);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        /*} catch (IOException e) {
+            e.printStackTrace();*/
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return "Saved";
     }
+
 
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<PointOfInterest> getAllPoints() {

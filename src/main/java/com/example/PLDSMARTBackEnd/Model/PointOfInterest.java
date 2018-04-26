@@ -27,7 +27,7 @@ public class PointOfInterest implements Serializable {
 
     protected String description;
 
-
+    @Lob
     protected byte[] picture;
 
     @Temporal(value = TemporalType.DATE)
@@ -48,7 +48,7 @@ public class PointOfInterest implements Serializable {
 
     public PointOfInterest(){}
 
-    public long getIdPoint() {
+    public Integer getIdPoint() {
         return IdPoint;
     }
 
