@@ -28,10 +28,12 @@ public class OriginalityEvaluationController{
 
     //  private int note;
     @RequestMapping(path = "/add")
-    public @ResponseBody String addNewOriginalityEvaluation(@RequestParam int note, @RequestParam String mailUser, @RequestParam long idPoi){
+    public @ResponseBody String addNewOriginalityEvaluation(@RequestParam int note,
+                                                            @RequestParam String mailUser,
+                                                            @RequestParam long idPoi){
         //Find the Object user thanks to his email address
-        User owner =  uR.findbyMail(mailUser);
-        PointOfInterest poi = (poiRepository.findbyId(idPoi));
+        User owner =  uR.findByMail(mailUser);
+        PointOfInterest poi = (poiRepository.findById(idPoi));
 
         OriginalityEvaluation originalityEvaluation = new OriginalityEvaluation();
         originalityEvaluation.setEvaluationDate(new Date());

@@ -39,7 +39,8 @@ public class PointOfInterestController {
     //Save the uploaded file to this folder
     private static String UPLOADED_FOLDER = "UploadedFile";
 
-    @RequestMapping(path = "/add")
+ //   @RequestMapping(value=("/uploadpsd"),headers=("content-type=multipart/*"),method=RequestMethod.POST)
+    @RequestMapping(path = "/add",headers=("content-type=multipart/*"))
     public @ResponseBody
     String addNewPoint(@RequestParam String title,
                        @RequestParam String description,

@@ -7,5 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface PointOfInterestRepository extends CrudRepository<PointOfInterest, Long> {
     @Query("SELECT p FROM PointOfInterest p WHERE p.IdPoint= :idPoi ")
-    public PointOfInterest findbyId(@Param("idPoi") long idPoi);
+    public PointOfInterest findById(@Param("idPoi") long idPoi);
 }
