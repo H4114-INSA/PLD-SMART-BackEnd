@@ -8,8 +8,6 @@ import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +29,9 @@ public class PointOfInterestController {
     @Autowired
     private TemporaryPointOfInterestRepository temporaryPoIRepository;
 
-    @RequestMapping(path = "/add")
-    public @ResponseBody
-    String addNewPoint(@RequestParam String title,
+        @RequestMapping(path = "/add")
+        public @ResponseBody
+        String addNewPoint(@RequestParam String title,
                        @RequestParam String description,
                        @RequestParam String mailUser,
                        @RequestParam String longitude,
