@@ -1,10 +1,7 @@
 package com.example.PLDSMARTBackEnd.Controller;
 
 
-import com.example.PLDSMARTBackEnd.Model.Category;
-import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
-import com.example.PLDSMARTBackEnd.Model.TemporaryPointOfInterest;
-import com.example.PLDSMARTBackEnd.Model.User;
+import com.example.PLDSMARTBackEnd.Model.*;
 import com.example.PLDSMARTBackEnd.Repository.CategoryRepository;
 import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
@@ -69,6 +66,7 @@ public class PointOfInterestController {
         p.setCreateDate(new Date());
         p.setLatitude(latitude);
         p.setLongitude(longitude);
+        p.setStatus(Status.Validated);
 
         //Put all categories in a list
         List<Category> categoryList = new ArrayList();
@@ -114,5 +112,10 @@ public class PointOfInterestController {
     public @ResponseBody Iterable<PointOfInterest> getAllPoints() {
         // This returns a JSON or XML with the users
         return pointRepository.findAll();
+    }
+
+    @GetMapping(path = "/allValid")
+    public @ResponseBody Iterable<PointOfInterest> getValidatedPoints(){
+        return pointRepository.findAllValidatedPoint();
     }
 }

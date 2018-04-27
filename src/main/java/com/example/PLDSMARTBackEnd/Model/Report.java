@@ -2,12 +2,6 @@ package com.example.PLDSMARTBackEnd.Model;
 
 import javax.persistence.*;
 
-enum Cause{
-    Duplicate,
-    Incoherent,
-    Illicite;
-}
-
 @Entity(name = "Report")
 public class Report {
     @Id

@@ -4,16 +4,9 @@ package com.example.PLDSMARTBackEnd.Model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-enum Status{
-    Proposed,
-    Validated,
-    Deprecated;
-}
 
 @Entity(name = "PointOfInterest")
 @Inheritance (strategy = InheritanceType.JOINED)
