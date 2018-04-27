@@ -41,6 +41,7 @@ public class OriginalityEvaluationController{
         originalityEvaluation.setPoint(poi);
         originalityEvaluation.setUser(owner);
 
+        oeRepository.save(originalityEvaluation);
         return "Saved";
     }
 
