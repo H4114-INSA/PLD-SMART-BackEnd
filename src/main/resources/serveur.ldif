@@ -42,7 +42,7 @@ objectclass: inetOrgPerson
 cn: Ben Alex
 sn: Alex
 uid: ben
-userPassword: {SHA}nFCebWjxfaLbHHG1Qk5UU4trbvQ=
+userPassword: $2a$10$QFT4kt1Whh18hBt.fbXEzus9tj/0eXRlbASNUnE3rMI7JDzq5rPDG
 
 dn: uid=bob,ou=people,dc=springframework,dc=org
 objectclass: top
@@ -63,13 +63,12 @@ ou: developer
 uniqueMember: uid=ben,ou=people,dc=springframework,dc=org
 uniqueMember: uid=bob,ou=people,dc=springframework,dc=org
 
-dn: cn=managers,ou=groups,dc=springframework,dc=org
+dn: cn=ADMIN,ou=groups,dc=springframework,dc=org
 objectclass: top
 objectclass: groupOfUniqueNames
-cn: managers
-ou: manager
+cn: ADMIN
+ou: admin
 uniqueMember: uid=ben,ou=people,dc=springframework,dc=org
-uniqueMember: cn=mouse\, jerry,ou=people,dc=springframework,dc=org
 
 dn: cn=submanagers,ou=subgroups,ou=groups,dc=springframework,dc=org
 objectclass: top

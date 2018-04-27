@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Configuration
@@ -22,11 +23,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ldapAuthentication()
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
+                .groupRoleAttribute("cn") // the role of the
                 .contextSource()
                 .url("ldap://localhost:8389/dc=springframework,dc=org")
                 .and()
                 .passwordCompare()
-                //.passwordEncoder(new BCryptPasswordEncoder())
+                    .passwordEncoder(new BCryptPasswordEncoder(10))
                     .passwordAttribute("userPassword");
         //auth.inMemoryAuthentication().withUser("bill").password("123").roles()
     }
@@ -70,6 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/add/**").permitAll()
                 .antMatchers("/user/authentication/**").permitAll()
+                .antMatchers("/report/all").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//We don't need sessions to be created.
