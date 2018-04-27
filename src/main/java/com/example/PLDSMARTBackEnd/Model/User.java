@@ -10,6 +10,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "IdUser")
     private Integer IdUser;
 
     @Column(nullable = false)

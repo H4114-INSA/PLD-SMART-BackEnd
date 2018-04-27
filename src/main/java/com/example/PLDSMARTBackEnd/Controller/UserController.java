@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -25,7 +26,7 @@ public class UserController {
     @Autowired
     private LdapTemplate ldapTemplate;
 
-    @GetMapping(path="/add") // Map ONLY GET Requests
+    @PostMapping(path="/add") // Map ONLY GET Requests
     public @ResponseBody
     String addNewUser (@RequestParam String firstName,
                        @RequestParam String lastName,
@@ -85,4 +86,67 @@ public class UserController {
             return null;
         }
     }
+
+    @PostMapping(path="/update")
+    public @ResponseBody User update(@RequestParam int id,
+                                     @RequestParam(required = false) String email,
+                                     @RequestParam(required = false) String firstName,
+                                     @RequestParam(required = false) String lastName,
+                                     @RequestParam(required = false) String biography,
+                                     @RequestParam(required = false) String hashPassword,
+                                     @RequestParam(required = false) MultipartFile file ){
+
+        int hasChanged = 0;
+        User u = userRepository.findById(id);
+        String oldEmail = u.getEmail();
+
+        Attribute objectClass = new BasicAttribute("objectClass");
+        {
+            objectClass.add("top");
+            objectClass.add("person");
+            objectClass.add("organizationalPerson");
+            objectClass.add("inetOrgPerson");
+        }
+        Attributes userAttributes = new BasicAttributes();
+        userAttributes.put(objectClass);
+        userAttributes.put("cn", u.getFirstName() + " " + u.getLastName());
+        userAttributes.put("sn", u.getLastName());
+        userAttributes.put("uid", u.getEmail());
+        userAttributes.put("userPassword", u.getHashPassword());
+
+
+        if(email != null){
+            u.setEmail(email);
+            userAttributes.put("uid", email);
+            hasChanged++;
+        }
+        if (firstName != null){
+            u.setFirstName(firstName);
+        }
+        if (lastName != null){
+            u.setLastName(lastName);
+            userAttributes.put("sn", lastName);
+        }
+        if(firstName != null || lastName != null){
+            userAttributes.put("cn", firstName + " " + lastName);
+            hasChanged++;
+        }
+        if(biography != null){
+            u.setBiography(biography);
+        }
+        if(hashPassword != null){
+            u.setHashPassword(hashPassword);
+            userAttributes.put("userPassword", hashPassword);
+            hasChanged++;
+        }
+
+        if(hasChanged != 0){
+            ldapTemplate.unbind(UtilLDAP.generateUserDN(oldEmail));
+            ldapTemplate.bind(UtilLDAP.generateUserDN(u.getEmail()), null, userAttributes);
+        }
+
+        u = userRepository.save(u);
+        return  u;
+    }
+
 }
