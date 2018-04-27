@@ -8,6 +8,7 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.JsonViewRequestBodyAdvice;
 
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -26,28 +27,18 @@ public class UserController {
     @Autowired
     private LdapTemplate ldapTemplate;
 
-    @PostMapping(path="/add") // Map ONLY GET Requests
+    @PostMapping(path="/add")
     public @ResponseBody
-    String addNewUser (@RequestParam String firstName,
-                       @RequestParam String lastName,
-                       @RequestParam String email,
-                       @RequestParam(required = false) String biography, //TODO : faire la gestion des images
-                       @RequestParam String password) {
+    String addNewUser (@RequestBody User user) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        if (firstName == "" || lastName == "" || email == "") {
+        if (user.getFirstName() == "" || user.getLastName() == ""
+                || user.getEmail() == "" || user.getHashPassword() == "") {
             return "Parametre(s) incorrect(s).";
         }
 
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setBiography(biography);
-        user.setHashPassword(password);
-
-        //----- LDAP
+        //----- LDAP -----
         Attribute objectClass = new BasicAttribute("objectClass");
         {
             objectClass.add("top");
@@ -57,16 +48,25 @@ public class UserController {
         }
         Attributes userAttributes = new BasicAttributes();
         userAttributes.put(objectClass);
-        userAttributes.put("cn", firstName + " " + lastName);
-        userAttributes.put("sn", lastName);
-        userAttributes.put("uid", email);
-        userAttributes.put("userPassword", password);
-        ldapTemplate.bind(UtilLDAP.generateUserDN(email), null, userAttributes);
-        //-----
+        userAttributes.put("cn", user.getFirstName() + " " + user.getLastName());
+        userAttributes.put("sn", user.getLastName());
+        userAttributes.put("uid", user.getEmail());
+        userAttributes.put("userPassword", user.getHashPassword());
+        ldapTemplate.bind(UtilLDAP.generateUserDN(user.getEmail()), null, userAttributes);
+        //----- LDAP -----
 
 
         userRepository.save(user);
         return "Saved"; // TODO : Faire le message d'erreur en cas d'échec de l'ajout (boolean ?)
+    }
+
+    @PostMapping(path = "/addBis")
+    public @ResponseBody String addBisNewUser(@RequestBody User user){
+        if(user != null){
+            userRepository.save(user);
+            return "saved";
+        }
+        return "Not saved";
     }
 
     @GetMapping(path="/all")

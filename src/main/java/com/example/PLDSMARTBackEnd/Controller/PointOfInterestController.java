@@ -44,7 +44,7 @@ public class PointOfInterestController {
     //private static String UPLOADED_FOLDER = "UploadedFile";
 
  //   @RequestMapping(value=("/uploadpsd"),headers=("content-type=multipart/*"),method=RequestMethod.POST)
-    @RequestMapping(path = "/add")
+    @PostMapping(path = "/add")
     public @ResponseBody
     String addNewPoint(@RequestParam String title,
                        @RequestParam String description,
@@ -117,4 +117,10 @@ public class PointOfInterestController {
     public @ResponseBody Iterable<PointOfInterest> getValidatedPoints(){
         return pointRepository.findAllValidatedPoint();
     }
+
+   /* @GetMapping(path = "/filterPoint")
+    public @ResponseBody Iterable<PointOfInterest> getPointsWithfilters(@RequestParam String name,
+                                                                        @RequestParam String[] categories){
+        return;
+    }*/
 }
