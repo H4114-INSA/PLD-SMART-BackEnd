@@ -11,4 +11,7 @@ public interface PointOfInterestRepository extends CrudRepository<PointOfInteres
 
     @Query("SELECT p FROM PointOfInterest p WHERE p.status = 'Validated'")
     Iterable<PointOfInterest> findAllValidatedPoint();
+
+    //@Query("SELECT p FROM PointOfInterest p WHERE ")
+    //Iterable<PointOfInterest> findPointWithFilters();
 }
