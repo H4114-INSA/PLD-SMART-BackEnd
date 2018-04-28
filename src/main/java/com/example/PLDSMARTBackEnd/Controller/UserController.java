@@ -59,20 +59,10 @@ public class UserController {
         ldapTemplate.bind(UtilLDAP.generateUserDN(user.getEmail()), null, userAttributes);
         //----- LDAP -----
 
-
         userRepository.save(user);
 
         //"{ \"response\" : \"saved\"}"
         return new JSONString("saved").toString(); // TODO : Faire le message d'erreur en cas d'échec de l'ajout (boolean ?)
-    }
-
-    @PostMapping(path = "/addBis")
-    public @ResponseBody String addBisNewUser(@RequestBody User user){
-        if(user != null){
-            userRepository.save(user);
-            return "saved";
-        }
-        return "Not saved";
     }
 
     @GetMapping(path="/all")
@@ -94,17 +84,17 @@ public class UserController {
     }
 
     @PostMapping(path="/update")
-    public @ResponseBody User update(@RequestParam int id,
-                                     @RequestParam(required = false) String email,
-                                     @RequestParam(required = false) String firstName,
-                                     @RequestParam(required = false) String lastName,
-                                     @RequestParam(required = false) String biography,
-                                     @RequestParam(required = false) String hashPassword,
-                                     @RequestParam(required = false) MultipartFile file ){
+    public @ResponseBody User update(@RequestBody User userUpdated){
 
-        int hasChanged = 0;
-        User u = userRepository.findById(id);
+        User u = userRepository.findByMail(userUpdated.getEmail());
         String oldEmail = u.getEmail();
+
+        u.setBiography(userUpdated.getBiography());
+        u.setEmail(userUpdated.getEmail());
+        u.setFirstName(userUpdated.getFirstName());
+        u.setLastName(userUpdated.getLastName());
+        u.setHashPassword(userUpdated.getHashPassword());
+
 
         Attribute objectClass = new BasicAttribute("objectClass");
         {
@@ -113,6 +103,7 @@ public class UserController {
             objectClass.add("organizationalPerson");
             objectClass.add("inetOrgPerson");
         }
+
         Attributes userAttributes = new BasicAttributes();
         userAttributes.put(objectClass);
         userAttributes.put("cn", u.getFirstName() + " " + u.getLastName());
@@ -120,36 +111,8 @@ public class UserController {
         userAttributes.put("uid", u.getEmail());
         userAttributes.put("userPassword", u.getHashPassword());
 
-
-        if(email != null){
-            u.setEmail(email);
-            userAttributes.put("uid", email);
-            hasChanged++;
-        }
-        if (firstName != null){
-            u.setFirstName(firstName);
-        }
-        if (lastName != null){
-            u.setLastName(lastName);
-            userAttributes.put("sn", lastName);
-        }
-        if(firstName != null || lastName != null){
-            userAttributes.put("cn", firstName + " " + lastName);
-            hasChanged++;
-        }
-        if(biography != null){
-            u.setBiography(biography);
-        }
-        if(hashPassword != null){
-            u.setHashPassword(hashPassword);
-            userAttributes.put("userPassword", hashPassword);
-            hasChanged++;
-        }
-
-        if(hasChanged != 0){
-            ldapTemplate.unbind(UtilLDAP.generateUserDN(oldEmail));
-            ldapTemplate.bind(UtilLDAP.generateUserDN(u.getEmail()), null, userAttributes);
-        }
+        ldapTemplate.unbind(UtilLDAP.generateUserDN(oldEmail));
+        ldapTemplate.bind(UtilLDAP.generateUserDN(u.getEmail()), null, userAttributes);
 
         u = userRepository.save(u);
         return  u;

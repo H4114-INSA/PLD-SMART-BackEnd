@@ -29,4 +29,7 @@ mysql> show tables;
 mysql> show columns from table_name;
 ```
 
+## TODO
+- Filtrage des poi pour la carte
+
 

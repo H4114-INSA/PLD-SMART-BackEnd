@@ -18,10 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @CrossOrigin
@@ -32,7 +28,7 @@ public class PointOfInterestController {
     private PointOfInterestRepository pointRepository;
 
     @Autowired
-    private UserRepository uR;
+    private UserRepository userRepository;
 
     @Autowired
     private TemporaryPointOfInterestRepository temporaryPoIRepository;
@@ -56,7 +52,7 @@ public class PointOfInterestController {
                        @RequestParam(required = false, defaultValue = "") String endDate) {
 
         //Find the Object user thanks to his email address
-        User owner = uR.findByMail(mailUser);
+        User owner = userRepository.findByMail(mailUser);
 
         //Create the new point
         PointOfInterest p = new PointOfInterest();
@@ -123,4 +119,16 @@ public class PointOfInterestController {
                                                                         @RequestParam String[] categories){
         return;
     }*/
+
+   @GetMapping(path = "/getUserPoi")
+    public @ResponseBody Iterable<PointOfInterest> getUserPoints(@RequestBody User user){
+       user = userRepository.findByMail(user.getEmail());
+       return pointRepository.findByUser(user);
+   }
+
+   @GetMapping(path = "/getUserValidatedPoi")
+    public @ResponseBody Iterable<PointOfInterest> getUserValidatedPoints(@RequestBody User user){
+       user = userRepository.findByMail(user.getEmail());
+       return pointRepository.findValidatedPointByUser(user);
+   }
 }
