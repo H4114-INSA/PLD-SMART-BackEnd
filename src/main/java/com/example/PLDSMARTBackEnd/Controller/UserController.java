@@ -3,7 +3,11 @@ package com.example.PLDSMARTBackEnd.Controller;
 import com.example.PLDSMARTBackEnd.Model.User;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
 import com.example.PLDSMARTBackEnd.util.UtilLDAP;
+import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +31,7 @@ public class UserController {
     @Autowired
     private LdapTemplate ldapTemplate;
 
-    @PostMapping(path="/add")
+    @PostMapping(path="/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     String addNewUser (@RequestBody User user) {
         // @ResponseBody means the returned String is the response, not a view name
@@ -57,7 +61,9 @@ public class UserController {
 
 
         userRepository.save(user);
-        return "Saved"; // TODO : Faire le message d'erreur en cas d'échec de l'ajout (boolean ?)
+
+        //"{ \"response\" : \"saved\"}"
+        return new JSONString("saved").toString(); // TODO : Faire le message d'erreur en cas d'échec de l'ajout (boolean ?)
     }
 
     @PostMapping(path = "/addBis")
