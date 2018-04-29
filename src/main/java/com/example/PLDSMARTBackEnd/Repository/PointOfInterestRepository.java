@@ -1,6 +1,7 @@
 package com.example.PLDSMARTBackEnd.Repository;
 
 import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
+import com.example.PLDSMARTBackEnd.Model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,12 @@ public interface PointOfInterestRepository extends CrudRepository<PointOfInteres
 
     @Query("SELECT p FROM PointOfInterest p WHERE p.status = 'Validated'")
     Iterable<PointOfInterest> findAllValidatedPoint();
+
+    @Query("SELECT p FROM PointOfInterest p WHERE p.owner= :user")
+    Iterable<PointOfInterest> findByUser(@Param("user") User user);
+
+    @Query("SELECT p FROM PointOfInterest p WHERE p.owner= :user AND p.status = 2")
+    Iterable<PointOfInterest> findValidatedPointByUser(@Param("user")User user);
 
     //@Query("SELECT p FROM PointOfInterest p WHERE ")
     //Iterable<PointOfInterest> findPointWithFilters();
