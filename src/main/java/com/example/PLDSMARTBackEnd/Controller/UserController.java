@@ -5,19 +5,26 @@ import com.example.PLDSMARTBackEnd.Repository.UserRepository;
 import com.example.PLDSMARTBackEnd.util.UtilLDAP;
 import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.JsonViewRequestBodyAdvice;
 
+import javax.naming.NameAlreadyBoundException;
+import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
+
+import java.util.List;
+
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 
 @CrossOrigin
@@ -33,7 +40,7 @@ public class UserController {
 
     @PostMapping(path="/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    String addNewUser (@RequestBody User user) {
+    String addNewUser (@RequestBody User user) throws NameAlreadyBoundException {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
@@ -55,7 +62,7 @@ public class UserController {
         userAttributes.put("cn", user.getFirstName() + " " + user.getLastName());
         userAttributes.put("sn", user.getLastName());
         userAttributes.put("uid", user.getEmail());
-        userAttributes.put("userPassword", user.getHashPassword());
+        userAttributes.put("password", user.getHashPassword());
         ldapTemplate.bind(UtilLDAP.generateUserDN(user.getEmail()), null, userAttributes);
         //----- LDAP -----
 
@@ -82,14 +89,36 @@ public class UserController {
     }
 
     @GetMapping(path="/authentication")
-    public @ResponseBody User authenticate(@RequestParam String email, @RequestParam String password){
+    public @ResponseBody User authenticate(@RequestParam String email, @RequestParam String password) throws HttpServerErrorException
+    {
+
+        /*
         String filter = "(&(objectclass=person)(uid=" + email + "))";
         boolean auth = ldapTemplate.authenticate(UtilLDAP.generateUserDN(email), filter, password);
         if(auth == true){
             User u = userRepository.findByMail(email);
             return u;
         }else {
-            return null;
+            throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+        }*/
+        List<String> userList = ldapTemplate.search(query().base(UtilLDAP.generateUserDN(email)).where("uid").is(email),
+                new AttributesMapper<String>() {
+                    public String mapFromAttributes(Attributes attrs)
+                            throws NamingException {
+                        return (String) attrs.get("password").get();
+                    }
+                });
+        if(userList.isEmpty()){
+            throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+        }else {
+            String hashedPassword = userList.get(0);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            if (passwordEncoder.matches(password,hashedPassword)) {
+                User u = userRepository.findByMail(email);
+                return u;
+            } else{
+                throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+            }
         }
     }
 
@@ -118,7 +147,7 @@ public class UserController {
         userAttributes.put("cn", u.getFirstName() + " " + u.getLastName());
         userAttributes.put("sn", u.getLastName());
         userAttributes.put("uid", u.getEmail());
-        userAttributes.put("userPassword", u.getHashPassword());
+        userAttributes.put("password", u.getHashPassword());
 
 
         if(email != null){
@@ -142,7 +171,7 @@ public class UserController {
         }
         if(hashPassword != null){
             u.setHashPassword(hashPassword);
-            userAttributes.put("userPassword", hashPassword);
+            userAttributes.put("password", hashPassword);
             hasChanged++;
         }
 

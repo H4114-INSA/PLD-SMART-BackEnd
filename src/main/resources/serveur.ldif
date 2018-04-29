@@ -42,7 +42,7 @@ objectclass: inetOrgPerson
 cn: Ben Alex
 sn: Alex
 uid: ben
-userPassword: $2a$10$QFT4kt1Whh18hBt.fbXEzus9tj/0eXRlbASNUnE3rMI7JDzq5rPDG
+password: $2a$10$QFT4kt1Whh18hBt.fbXEzus9tj/0eXRlbASNUnE3rMI7JDzq5rPDG
 
 dn: uid=bob,ou=people,dc=springframework,dc=org
 objectclass: top
@@ -52,7 +52,7 @@ objectclass: inetOrgPerson
 cn: Bob Hamilton
 sn: Hamilton
 uid: bob
-userPassword: bobspassword
+password: bobspassword
 
 
 dn: cn=developers,ou=groups,dc=springframework,dc=org
