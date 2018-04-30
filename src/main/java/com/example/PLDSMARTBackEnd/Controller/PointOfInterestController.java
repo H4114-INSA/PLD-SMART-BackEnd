@@ -131,4 +131,16 @@ public class PointOfInterestController {
        user = userRepository.findByMail(user.getEmail());
        return pointRepository.findValidatedPointByUser(user);
    }
+
+    @GetMapping(path = "/getNumberUserPoi")
+    public @ResponseBody int getNumberUserPoints(@RequestBody User user){
+        user = userRepository.findByMail(user.getEmail());
+        return (int) pointRepository.findByUser(user).spliterator().getExactSizeIfKnown();
+    }
+
+    @GetMapping(path = "/getNumberValidatedUserPoi")
+    public @ResponseBody int getNumberValidatedUserPoint(@RequestBody User user){
+        user = userRepository.findByMail(user.getEmail());
+        return (int) pointRepository.findValidatedPointByUser(user).spliterator().getExactSizeIfKnown();
+    }
 }

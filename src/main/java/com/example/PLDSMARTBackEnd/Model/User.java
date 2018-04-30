@@ -1,10 +1,6 @@
 package com.example.PLDSMARTBackEnd.Model;
 
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity(name = "User")
 public class User {
@@ -24,7 +20,8 @@ public class User {
 
     private String biography;
 
-    private String pathToProfilePicture;
+    @Lob
+    private byte[] profilePicture;
 
     @Column(nullable = false)
     private String hashPassword;
@@ -77,12 +74,12 @@ public class User {
         this.biography = biography;
     }
 
-    public String getPathToProfilePicture() {
-        return pathToProfilePicture;
+    public byte[] getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setPathToProfilePicture(String pathToProfilePicture) {
-        this.pathToProfilePicture = pathToProfilePicture;
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getHashPassword() {
