@@ -6,7 +6,9 @@ import com.example.PLDSMARTBackEnd.Repository.CategoryRepository;
 import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
+import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,8 +41,7 @@ public class PointOfInterestController {
     //Save the uploaded file to this folder
     //private static String UPLOADED_FOLDER = "UploadedFile";
 
- //   @RequestMapping(value=("/uploadpsd"),headers=("content-type=multipart/*"),method=RequestMethod.POST)
-    @PostMapping(path = "/add")
+  /* @PostMapping(path = "/add")
     public @ResponseBody
     String addNewPoint(@RequestParam String title,
                        @RequestParam String description,
@@ -73,17 +74,7 @@ public class PointOfInterestController {
         }
         p.setCategories(categoryList);
 
-        //Load the picture
-        /*if (file.isEmpty()) {
-            return "Image manquante";
-        }*/
-
         try {
-            // Get the file and save it somewhere
-           // p.setPicture(file.getBytes());
-
-           /* Path path = Paths.get(UPLOADED_FOLDER + p.getIdPoint()+".png");
-            Files.write(path, bytes);*/
             // TODO : faire le stockage des path dans l'objet poi
             if (!endDate.equals("")) {
                 TemporaryPointOfInterest tp = new TemporaryPointOfInterest(p);
@@ -95,12 +86,20 @@ public class PointOfInterestController {
                 //Save point
                 pointRepository.save(p);
             }
-        /*} catch (IOException e) {
-            e.printStackTrace();*/
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return "Saved";
+    }*/
+
+    @PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody String addNewPoint(@RequestBody PointOfInterest point){
+        User user= userRepository.findByMail(point.getOwner().getEmail());
+        point.setOwner(user);
+        point.setCreateDate(new Date());
+
+        pointRepository.save(point);
+        return new JSONString("saved").toString();
     }
 
     @GetMapping(path = "/all")

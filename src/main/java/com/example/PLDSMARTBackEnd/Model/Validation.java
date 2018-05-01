@@ -12,7 +12,7 @@ public class Validation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer IdValidation;
 
-    private boolean validationNode;
+    private boolean validationNote;
 
     @Temporal(value = TemporalType.DATE)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -35,12 +35,12 @@ public class Validation {
         IdValidation = idValidation;
     }
 
-    public boolean isValidationNode() {
-        return validationNode;
+    public boolean isValidationNote() {
+        return validationNote;
     }
 
-    public void setValidationNode(boolean validationNode) {
-        this.validationNode = validationNode;
+    public void setValidationNote(boolean validationNote) {
+        this.validationNote = validationNote;
     }
 
     public Date getValidationDate() {

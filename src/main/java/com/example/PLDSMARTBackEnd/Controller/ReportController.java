@@ -1,8 +1,6 @@
 package com.example.PLDSMARTBackEnd.Controller;
 
-import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
 import com.example.PLDSMARTBackEnd.Model.Report;
-import com.example.PLDSMARTBackEnd.Model.User;
 import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.ReportRepository;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
@@ -25,17 +23,10 @@ public class ReportController {
 
     @GetMapping(path = "/add")
     public @ResponseBody
-    String addReport(@RequestParam String email,
-                     @RequestParam int idPoint,
-                     @RequestParam String cause){
-        User user = userRepository.findByMail(email);
-        PointOfInterest poi = pointOfInterestRepository.findById(idPoint);
-        // TODO : faire la cause
+    String addReport(@RequestBody Report report){
+        report.setUser(userRepository.findByMail(report.getUser().getEmail()));
+        //report.setPoint(pointOfInterestRepository.findByUser(report.getUser()));
 
-        Report report = new Report();
-        report.setPoint(poi);
-        report.setUser(user);
-        
         reportRepository.save(report);
         return "";
     }
