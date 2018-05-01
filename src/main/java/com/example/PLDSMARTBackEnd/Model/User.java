@@ -24,6 +24,8 @@ public class User {
 
     private String biography;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String pathToProfilePicture;
 
     @Column(nullable = false)
