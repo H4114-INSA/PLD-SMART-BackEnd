@@ -21,8 +21,7 @@ public class User {
     private String biography;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
-    private String pathToProfilePicture;
+    private String profilePicture;
 
     @Column(nullable = false)
     private String hashPassword;
@@ -75,11 +74,11 @@ public class User {
         this.biography = biography;
     }
 
-    public byte[] getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 
