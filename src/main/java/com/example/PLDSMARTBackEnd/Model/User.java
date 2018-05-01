@@ -21,7 +21,8 @@ public class User {
     private String biography;
 
     @Lob
-    private byte[] profilePicture;
+    @Column(columnDefinition = "TEXT")
+    private String pathToProfilePicture;
 
     @Column(nullable = false)
     private String hashPassword;
