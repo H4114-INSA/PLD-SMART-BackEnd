@@ -2,10 +2,7 @@ package com.example.PLDSMARTBackEnd.Controller;
 
 
 import com.example.PLDSMARTBackEnd.Model.*;
-import com.example.PLDSMARTBackEnd.Repository.CategoryRepository;
-import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
-import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
-import com.example.PLDSMARTBackEnd.Repository.UserRepository;
+import com.example.PLDSMARTBackEnd.Repository.*;
 import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -41,6 +38,9 @@ public class PointOfInterestController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ValidationRepository validationRepository;
 
     //Save the uploaded file to this folder
     //private static String UPLOADED_FOLDER = "UploadedFile";
@@ -149,8 +149,8 @@ public class PointOfInterestController {
 
     @GetMapping(path = "/getPointToValidate")
     public @ResponseBody
-    PointOfInterest getPointToValidate(@RequestParam int id){
-       User user = userRepository.findById(id);
+    PointOfInterest getPointToValidate(@RequestParam String email){
+       User user = userRepository.findByMail(email);
        if(user != null){
            Iterable<PointOfInterest> listPoints = pointRepository.findListPointToValidate(user);
            if(listPoints.spliterator().getExactSizeIfKnown() != 0){
@@ -160,5 +160,21 @@ public class PointOfInterestController {
            }
        }
         throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping(path = "/voteForPoi")
+    public @ResponseBody
+    void validatePoi(@RequestBody Validation validation){
+       User user = userRepository.findByMail(validation.getUser().getEmail());
+       validation.getUser().setIdUser(user.getIdUser());
+
+       if(validation.isValidationNote()){
+           validation.getPoint().setStatus(Status.Validated);
+       }else {
+           validation.getPoint().setStatus(Status.Deprecated);
+       }
+
+       pointRepository.save(validation.getPoint());
+       validationRepository.save(validation);
     }
 }

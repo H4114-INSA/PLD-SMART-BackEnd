@@ -1,5 +1,6 @@
 package com.example.PLDSMARTBackEnd.Model;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
