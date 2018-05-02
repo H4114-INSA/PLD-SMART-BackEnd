@@ -10,7 +10,7 @@ public class Category {
     @Column(name = "IdCategory")
     private Integer IdCategory;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String categoryName;
 
     public Integer getIdCategory() {
@@ -27,5 +27,9 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String toString(){
+        return "Id Category : "+IdCategory+" - Category name : "+categoryName;
     }
 }

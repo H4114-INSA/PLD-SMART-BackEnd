@@ -120,26 +120,39 @@ public class PointOfInterestController {
     }*/
 
    @GetMapping(path = "/getUserPoi")
-    public @ResponseBody Iterable<PointOfInterest> getUserPoints(@RequestBody User user){
-       user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody Iterable<PointOfInterest> getUserPoints(@RequestParam String mailUser){
+       User user = userRepository.findByMail(mailUser);
        return pointRepository.findByUser(user);
    }
 
    @GetMapping(path = "/getUserValidatedPoi")
-    public @ResponseBody Iterable<PointOfInterest> getUserValidatedPoints(@RequestBody User user){
-       user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody Iterable<PointOfInterest> getUserValidatedPoints(@RequestParam String mailUser){
+       User user = userRepository.findByMail(mailUser);
        return pointRepository.findValidatedPointByUser(user);
    }
 
     @GetMapping(path = "/getNumberUserPoi")
-    public @ResponseBody int getNumberUserPoints(@RequestBody User user){
-        user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody int getNumberUserPoints(@RequestParam String mailUser){
+        User user = userRepository.findByMail(mailUser);
         return (int) pointRepository.findByUser(user).spliterator().getExactSizeIfKnown();
     }
 
     @GetMapping(path = "/getNumberValidatedUserPoi")
-    public @ResponseBody int getNumberValidatedUserPoint(@RequestBody User user){
-        user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody int getNumberValidatedUserPoint(@RequestParam String mailUser){
+        User user = userRepository.findByMail(mailUser);
         return (int) pointRepository.findValidatedPointByUser(user).spliterator().getExactSizeIfKnown();
+    }
+
+    @GetMapping(path = "/getFilterPoints")
+    public @ResponseBody List<PointOfInterest> getPointFiltered(@RequestParam String[] nameCategories){
+        List<String> categories = new ArrayList<String>();
+        for(int i =0 ; i<nameCategories.length ; i++){
+            categories.add(nameCategories[i]);
+        }
+        List<PointOfInterest> finalPoints = new ArrayList<PointOfInterest>();
+        for(PointOfInterest poi : pointRepository.findPointWithFilters(categories)){
+            finalPoints.add(pointRepository.findById(poi.getIdPoint()));
+        }
+       return finalPoints; //TODO : Categories tronquees
     }
 }
