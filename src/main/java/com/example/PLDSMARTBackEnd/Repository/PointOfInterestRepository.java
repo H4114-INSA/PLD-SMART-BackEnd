@@ -1,10 +1,9 @@
 package com.example.PLDSMARTBackEnd.Repository;
 
-import com.example.PLDSMARTBackEnd.Model.Category;
 import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
 import com.example.PLDSMARTBackEnd.Model.User;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -27,4 +26,7 @@ public interface PointOfInterestRepository extends CrudRepository<PointOfInteres
 
     @Query("SELECT p FROM PointOfInterest p WHERE p.owner <> :user AND p.status = 0")
     Iterable<PointOfInterest> findListPointToValidate(@Param("user") User user);
+
+    @Query("SELECT p FROM PointOfInterest p WHERE p.title LIKE :name AND p.status = 1")
+    Iterable<PointOfInterest> findSearchedPoints (@Param("name")String name);
 }
