@@ -28,7 +28,10 @@ mysql> show tables;
 ```jshelllanguage
 mysql> show columns from table_name;
 ```
-
+- Remplir la base de données
+```jshelllanguage
+mysql> source pathToFile_unix_style;
+```
 ## TODO
 - Filtrage des poi pour la carte
 

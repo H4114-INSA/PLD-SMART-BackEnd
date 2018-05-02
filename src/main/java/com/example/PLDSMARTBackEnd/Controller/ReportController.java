@@ -26,7 +26,6 @@ public class ReportController {
     String addReport(@RequestBody Report report){
         report.setUser(userRepository.findByMail(report.getUser().getEmail()));
         //report.setPoint(pointOfInterestRepository.findByUser(report.getUser()));
-
         reportRepository.save(report);
         return "";
     }

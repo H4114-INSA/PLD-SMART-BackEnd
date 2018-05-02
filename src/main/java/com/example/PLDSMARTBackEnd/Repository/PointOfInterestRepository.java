@@ -10,13 +10,13 @@ public interface PointOfInterestRepository extends CrudRepository<PointOfInteres
     @Query("SELECT p FROM PointOfInterest p WHERE p.IdPoint= :idPoi ")
     PointOfInterest findById(@Param("idPoi") int idPoi);
 
-    @Query("SELECT p FROM PointOfInterest p WHERE p.status = 'Validated'")
+    @Query("SELECT p FROM PointOfInterest p WHERE p.status = 1")
     Iterable<PointOfInterest> findAllValidatedPoint();
 
     @Query("SELECT p FROM PointOfInterest p WHERE p.owner= :user")
     Iterable<PointOfInterest> findByUser(@Param("user") User user);
 
-    @Query("SELECT p FROM PointOfInterest p WHERE p.owner= :user AND p.status = 2")
+    @Query("SELECT p FROM PointOfInterest p WHERE p.owner= :user AND p.status = 1")
     Iterable<PointOfInterest> findValidatedPointByUser(@Param("user")User user);
 
     //@Query("SELECT p FROM PointOfInterest p WHERE ")
