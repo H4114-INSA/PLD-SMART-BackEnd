@@ -13,6 +13,13 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String categoryName;
 
+    public Category(){
+
+    }
+
+    public Category(String categoryName){
+        this.categoryName=categoryName;
+    }
     public Integer getIdCategory() {
         return IdCategory;
     }

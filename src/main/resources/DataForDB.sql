@@ -16,7 +16,7 @@ VALUES
 --(4, "Biography de Homer", "Homer@email.fr", "Homer", "Homerpassword", "Simpson", "pas d'image");
 
 
-INSERT INTO point_of_interest(id_point, create_date, description, latitude, longitude, picture, status, title, owner_id_user)
+/*INSERT INTO point_of_interest(id_point, create_date, description, latitude, longitude, picture, status, title, owner_id_user)
 VALUES
 (1, "2017-12-04", "Description 1", 45.755378, 4.847856, null, 1, "Titre poi 1", 1),
 (2, "2017-05-13", "Description 2", 45.755335, 4.847865, null, 1, "Titre poi 2", 2),
@@ -32,4 +32,4 @@ VALUES
 (1, 2),
 (2,3),
 (2,4),
-(4,6);
+(4,6);*/

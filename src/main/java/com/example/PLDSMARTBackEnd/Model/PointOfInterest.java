@@ -21,7 +21,7 @@ public class PointOfInterest implements Serializable {
     protected String description;
 
     @Lob
-    protected byte[] picture;
+    protected String picture;
 
     @Temporal(value = TemporalType.DATE)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -65,11 +65,11 @@ public class PointOfInterest implements Serializable {
         this.description = description;
     }
 
-    public byte[] getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

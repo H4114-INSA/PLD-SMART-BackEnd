@@ -101,8 +101,28 @@ public class PointOfInterestController {
         User user= userRepository.findByMail(point.getOwner().getEmail());
         point.setOwner(user);
         point.setCreateDate(new Date());
-
+        List<Category> categoriesList = new ArrayList<>();
+        for(Category c : point.getCategories()){
+            categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
+        }
+        point.setCategories(categoriesList);
+        point.setStatus(Status.Validated);
         pointRepository.save(point);
+        return new JSONString("saved").toString();
+    }
+
+    @PostMapping(path = "/addTemporary", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody String addNewTemporaryPoint(@RequestBody TemporaryPointOfInterest point){
+        User user= userRepository.findByMail(point.getOwner().getEmail());
+        point.setOwner(user);
+        point.setCreateDate(new Date());
+        List<Category> categoriesList = new ArrayList<>();
+        for(Category c : point.getCategories()){
+            categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
+        }
+        point.setCategories(categoriesList);
+        point.setStatus(Status.Validated);
+        temporaryPoIRepository.save(point);
         return new JSONString("saved").toString();
     }
 
