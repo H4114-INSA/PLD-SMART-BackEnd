@@ -1,29 +1,22 @@
 package com.example.PLDSMARTBackEnd.Controller;
 
 
-import com.example.PLDSMARTBackEnd.Model.*;
+import com.example.PLDSMARTBackEnd.Model.PointOfInterest;
+import com.example.PLDSMARTBackEnd.Model.User;
 import com.example.PLDSMARTBackEnd.Repository.CategoryRepository;
 import com.example.PLDSMARTBackEnd.Repository.PointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository;
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
 import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.ws.http.HTTPException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-
 import java.util.List;
 
 @CrossOrigin
@@ -173,5 +166,15 @@ public class PointOfInterestController {
            }
        }
         throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(path = "/getSearchedPoints")
+    public @ResponseBody List<PointOfInterest> getPointSearched(@RequestParam String name){
+        List<PointOfInterest> finalPoints = new ArrayList<PointOfInterest>();
+        name = "%" + name + "%";
+        for(PointOfInterest poi : pointRepository.findSearchedPoints(name)){
+            finalPoints.add(poi);
+        }
+        return finalPoints;
     }
 }
