@@ -5,22 +5,14 @@ import com.example.PLDSMARTBackEnd.Model.*;
 import com.example.PLDSMARTBackEnd.Repository.*;
 import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.ws.http.HTTPException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-
 import java.util.List;
 
 @CrossOrigin
@@ -101,8 +93,28 @@ public class PointOfInterestController {
         User user= userRepository.findByMail(point.getOwner().getEmail());
         point.setOwner(user);
         point.setCreateDate(new Date());
-
+        List<Category> categoriesList = new ArrayList<>();
+        for(Category c : point.getCategories()){
+            categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
+        }
+        point.setCategories(categoriesList);
+        point.setStatus(Status.Validated);
         pointRepository.save(point);
+        return new JSONString("saved").toString();
+    }
+
+    @PostMapping(path = "/addTemporary", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody String addNewTemporaryPoint(@RequestBody TemporaryPointOfInterest point){
+        User user= userRepository.findByMail(point.getOwner().getEmail());
+        point.setOwner(user);
+        point.setCreateDate(new Date());
+        List<Category> categoriesList = new ArrayList<>();
+        for(Category c : point.getCategories()){
+            categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
+        }
+        point.setCategories(categoriesList);
+        point.setStatus(Status.Validated);
+        temporaryPoIRepository.save(point);
         return new JSONString("saved").toString();
     }
 
@@ -124,27 +136,40 @@ public class PointOfInterestController {
     }*/
 
    @GetMapping(path = "/getUserPoi")
-    public @ResponseBody Iterable<PointOfInterest> getUserPoints(@RequestBody User user){
-       user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody Iterable<PointOfInterest> getUserPoints(@RequestParam String mailUser){
+       User user = userRepository.findByMail(mailUser);
        return pointRepository.findByUser(user);
    }
 
    @GetMapping(path = "/getUserValidatedPoi")
-    public @ResponseBody Iterable<PointOfInterest> getUserValidatedPoints(@RequestBody User user){
-       user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody Iterable<PointOfInterest> getUserValidatedPoints(@RequestParam String mailUser){
+       User user = userRepository.findByMail(mailUser);
        return pointRepository.findValidatedPointByUser(user);
    }
 
     @GetMapping(path = "/getNumberUserPoi")
-    public @ResponseBody int getNumberUserPoints(@RequestBody User user){
-        user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody int getNumberUserPoints(@RequestParam String mailUser){
+        User user = userRepository.findByMail(mailUser);
         return (int) pointRepository.findByUser(user).spliterator().getExactSizeIfKnown();
     }
 
     @GetMapping(path = "/getNumberValidatedUserPoi")
-    public @ResponseBody int getNumberValidatedUserPoint(@RequestBody User user){
-        user = userRepository.findByMail(user.getEmail());
+    public @ResponseBody int getNumberValidatedUserPoint(@RequestParam String mailUser){
+        User user = userRepository.findByMail(mailUser);
         return (int) pointRepository.findValidatedPointByUser(user).spliterator().getExactSizeIfKnown();
+    }
+
+    @GetMapping(path = "/getFilterPoints")
+    public @ResponseBody List<PointOfInterest> getPointFiltered(@RequestParam String[] nameCategories){
+        List<String> categories = new ArrayList<String>();
+        for(int i =0 ; i<nameCategories.length ; i++){
+            categories.add(nameCategories[i]);
+        }
+        List<PointOfInterest> finalPoints = new ArrayList<PointOfInterest>();
+        for(PointOfInterest poi : pointRepository.findPointWithFilters(categories)){
+            finalPoints.add(pointRepository.findById(poi.getIdPoint()));
+        }
+       return finalPoints; //TODO : Categories tronquees
     }
 
     @GetMapping(path = "/getPointToValidate")
@@ -176,5 +201,15 @@ public class PointOfInterestController {
 
        pointRepository.save(validation.getPoint());
        validationRepository.save(validation);
+    }
+
+    @GetMapping(path = "/getSearchedPoints")
+    public @ResponseBody List<PointOfInterest> getPointSearched(@RequestParam String name){
+        List<PointOfInterest> finalPoints = new ArrayList<PointOfInterest>();
+        name = "%" + name + "%";
+        for(PointOfInterest poi : pointRepository.findSearchedPoints(name)){
+            finalPoints.add(poi);
+        }
+        return finalPoints;
     }
 }
