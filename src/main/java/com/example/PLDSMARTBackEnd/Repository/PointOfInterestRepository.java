@@ -19,6 +19,6 @@ public interface PointOfInterestRepository extends CrudRepository<PointOfInteres
     @Query("SELECT p FROM PointOfInterest p WHERE p.owner= :user AND p.status = 1")
     Iterable<PointOfInterest> findValidatedPointByUser(@Param("user")User user);
 
-    //@Query("SELECT p FROM PointOfInterest p WHERE ")
-    //Iterable<PointOfInterest> findPointWithFilters();
+    @Query("SELECT p FROM PointOfInterest p WHERE p.owner <> :user AND p.status = 0")
+    Iterable<PointOfInterest> findListPointToValidate(@Param("user") User user);
 }
