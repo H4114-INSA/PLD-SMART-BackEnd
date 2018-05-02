@@ -8,11 +8,15 @@ import com.example.PLDSMARTBackEnd.Repository.TemporaryPointOfInterestRepository
 import com.example.PLDSMARTBackEnd.Repository.UserRepository;
 import com.unboundid.util.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.ws.http.HTTPException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -154,5 +158,20 @@ public class PointOfInterestController {
             finalPoints.add(pointRepository.findById(poi.getIdPoint()));
         }
        return finalPoints; //TODO : Categories tronquees
+    }
+
+    @GetMapping(path = "/getPointToValidate")
+    public @ResponseBody
+    PointOfInterest getPointToValidate(@RequestParam int id){
+       User user = userRepository.findById(id);
+       if(user != null){
+           Iterable<PointOfInterest> listPoints = pointRepository.findListPointToValidate(user);
+           if(listPoints.spliterator().getExactSizeIfKnown() != 0){
+               return listPoints.iterator().next();
+           }else {
+               throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+           }
+       }
+        throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
     }
 }

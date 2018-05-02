@@ -7,8 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 public interface PointOfInterestRepository extends CrudRepository<PointOfInterest, Long> {
     @Query("SELECT p FROM PointOfInterest p WHERE p.IdPoint= :idPoi ")
     PointOfInterest findById(@Param("idPoi") int idPoi);
@@ -25,4 +23,6 @@ public interface PointOfInterestRepository extends CrudRepository<PointOfInteres
     @Query("SELECT DISTINCT p FROM PointOfInterest p JOIN FETCH p.categories c WHERE c.categoryName IN :categories")
     Iterable<PointOfInterest> findPointWithFilters(@Param("categories")List<String> category);
 
+    @Query("SELECT p FROM PointOfInterest p WHERE p.owner <> :user AND p.status = 0")
+    Iterable<PointOfInterest> findListPointToValidate(@Param("user") User user);
 }

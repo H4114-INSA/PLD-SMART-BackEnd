@@ -21,6 +21,9 @@ VALUES
 (1, "2017-12-04", "Description 1", 45.755378, 4.847856, null, 1, "Titre poi 1", 1),
 (2, "2017-05-13", "Description 2", 45.755335, 4.847865, null, 1, "Titre poi 2", 2),
 (3, "2017-11-24", "Description 3", 45.755355, 4.847875, null, 1, "Titre poi 3", 4),
+(4, "2018-04-28", "Description 4", 45.755355, 4.847875, null, 1, "Titre poi 4", 4),
+(5, "2018-04-28", "Description 4", 45.755355, 4.847875, null, 0, "Titre poi 4", 4),
+(6, "2018-04-28", "Description 4", 45.755355, 4.847875, null, 0, "Titre poi 4", 4);
 (4, "2018-04-28", "Description 4", 45.755355, 4.847875, null, 1, "Titre poi 4", 4);
 
 INSERT INTO point_of_interest_categories(point_of_interest_id_point, categories_id_category)
