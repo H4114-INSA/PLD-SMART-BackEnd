@@ -44,7 +44,7 @@ public class PointOfInterestController {
             categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
         }
         point.setCategories(categoriesList);
-        point.setStatus(Status.Validated); //TODO : changer à proposed
+        point.setStatus(Status.Proposed);
         pointRepository.save(point);
         return new JSONString("saved").toString();
     }
