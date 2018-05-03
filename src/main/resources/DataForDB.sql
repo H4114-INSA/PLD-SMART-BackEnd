@@ -8,7 +8,7 @@ VALUES
 (6, "Point de vue");
 
 
-/*--INSERT INTO user(id_user, biography, email, first_name, hash_password, last_name, profile_picture)
+--INSERT INTO user(id_user, biography, email, first_name, hash_password, last_name, profile_picture)
 --VALUES
 --(1, "Biography de Jean", "Jean@email.fr", "Jean", "Jeanpassword", "Val Jean", "pas d'image"),
 --(2, "Biography de Pierre", "Pierre@email.fr", "Jean", "Pierrepassword", "Papier Feuille", "pas d'image"),
@@ -33,4 +33,4 @@ VALUES
 (2,4),
 (4,6),
 (5,3),
-(6,3);*/
+(6,3);
