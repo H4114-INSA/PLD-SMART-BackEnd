@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingException;
@@ -21,8 +20,8 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
-
 import java.util.List;
+
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 
@@ -144,6 +143,28 @@ public class UserController {
 
         u = userRepository.save(u);
         return  u;
+    }
+
+    @GetMapping(path="/check")
+    public @ResponseBody boolean checkExisting(@RequestParam String email) throws HttpServerErrorException
+    {
+        List<String> userList = ldapTemplate.search(query().base(UtilLDAP.generateUserDN(email)).where("uid").is(email),
+                new AttributesMapper<String>() {
+                    public String mapFromAttributes(Attributes attrs)
+                            throws NamingException {
+                            return (String) attrs.get("uid").get();
+                    }
+                });
+        if(userList.isEmpty()){
+            throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
+        }else {
+            for(String mail : userList){
+                if(mail.equals(email)){
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 }
