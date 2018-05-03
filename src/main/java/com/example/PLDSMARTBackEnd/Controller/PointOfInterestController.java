@@ -34,60 +34,6 @@ public class PointOfInterestController {
     @Autowired
     private ValidationRepository validationRepository;
 
-    //Save the uploaded file to this folder
-    //private static String UPLOADED_FOLDER = "UploadedFile";
-
-  /* @PostMapping(path = "/add")
-    public @ResponseBody
-    String addNewPoint(@RequestParam String title,
-                       @RequestParam String description,
-                       @RequestParam String mailUser,
-                       @RequestParam long longitude,
-                       @RequestParam long latitude,
-                       @RequestParam String[] categories,
-                       @RequestParam(required = false) MultipartFile file,
-                       @RequestParam(required = false, defaultValue = "") String endDate) {
-
-        //Find the Object user thanks to his email address
-        User owner = userRepository.findByMail(mailUser);
-
-        //Create the new point
-        PointOfInterest p = new PointOfInterest();
-        p.setTitle(title);
-        p.setDescription(description);
-        p.setOwner(owner);
-        p.setCreateDate(new Date());
-        p.setLatitude(latitude);
-        p.setLongitude(longitude);
-        p.setStatus(Status.Validated);
-
-        //Put all categories in a list
-        List<Category> categoryList = new ArrayList();
-        for(int i = 0 ; i<categories.length ; i++){
-            Category tmp = categoryRepository.findById(Integer.parseInt(categories[i]));
-            System.out.println(tmp.getCategoryName());
-            categoryList.add(tmp);
-        }
-        p.setCategories(categoryList);
-
-        try {
-            // TODO : faire le stockage des path dans l'objet poi
-            if (!endDate.equals("")) {
-                TemporaryPointOfInterest tp = new TemporaryPointOfInterest(p);
-                DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                Date date = format.parse(endDate);
-                tp.setEndDate(date);
-                temporaryPoIRepository.save(tp);
-            } else {
-                //Save point
-                pointRepository.save(p);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "Saved";
-    }*/
-
     @PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody String addNewPoint(@RequestBody PointOfInterest point){
         User user= userRepository.findByMail(point.getOwner().getEmail());
@@ -98,7 +44,7 @@ public class PointOfInterestController {
             categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
         }
         point.setCategories(categoriesList);
-        point.setStatus(Status.Validated);
+        point.setStatus(Status.Validated); //TODO : changer à proposed
         pointRepository.save(point);
         return new JSONString("saved").toString();
     }
@@ -113,7 +59,7 @@ public class PointOfInterestController {
             categoriesList.add(categoryRepository.findByName(c.getCategoryName()));
         }
         point.setCategories(categoriesList);
-        point.setStatus(Status.Validated);
+        point.setStatus(Status.Proposed);
         temporaryPoIRepository.save(point);
         return new JSONString("saved").toString();
     }
@@ -128,12 +74,6 @@ public class PointOfInterestController {
     public @ResponseBody Iterable<PointOfInterest> getValidatedPoints(){
         return pointRepository.findAllValidatedPoint();
     }
-
-   /* @GetMapping(path = "/filterPoint")
-    public @ResponseBody Iterable<PointOfInterest> getPointsWithfilters(@RequestParam String name,
-                                                                        @RequestParam String[] categories){
-        return;
-    }*/
 
    @GetMapping(path = "/getUserPoi")
     public @ResponseBody Iterable<PointOfInterest> getUserPoints(@RequestParam String mailUser){
